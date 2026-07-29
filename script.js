@@ -32,15 +32,19 @@ function toggleTheme() {
     }
 }
 
+
 function shareHomestay(id, name) {
-    // Generates a direct link including the homestay ID (e.g. index.html?id=2)
-    const shareUrl = `${window.location.origin}${window.location.pathname}?id=${id}`;
+    // Ensures clean extraction of origin and pathname for GitHub Pages
+    const baseUrl = window.location.origin + window.location.pathname;
+    const shareUrl = `${baseUrl}?id=${id}`;
     
     navigator.clipboard.writeText(shareUrl).then(() => {
-        alert(`Direct link for ${name} copied to clipboard!`);
+        alert(`Direct link for "${name}" copied to clipboard!`);
+    }).catch(err => {
+        console.error('Failed to copy: ', err);
+        prompt("Copy this link:", shareUrl);
     });
 }
-
 // ==========================================
 // 3. LOGIC: EQUAL CHANCE ROTATION
 // ==========================================
