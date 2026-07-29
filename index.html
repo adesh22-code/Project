@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Darjeeling Homestays Directory</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+    <button class="theme-toggle" onclick="toggleTheme()">🌙 Dark Mode</button>
+    <h1>Darjeeling Homestays Directory</h1>
+    <p>Find local stays across Darjeeling, Lamahatta, Sitong, Takdah, and beyond.</p>
+</header>
+
+<div class="container">
+    
+    <!-- ================= MAIN DIRECTORY VIEW ================= -->
+    <div id="main-view">
+        <div class="refresh-notice">
+            💡 Showing up to 10 unique homestays per visit. Refresh to cycle through the directory!
+        </div>
+
+        <!-- Filter Section -->
+        <div class="filter-card">
+            <div class="filter-group">
+                <label for="searchInput">Search Name</label>
+                <input type="text" id="searchInput" placeholder="e.g. Kanchenjunga..." />
+            </div>
+            <div class="filter-group">
+                <label for="locationFilter">Location</label>
+                <select id="locationFilter"><option value="all">All Locations</option></select>
+            </div>
+            <div class="filter-group">
+                <label for="sceneFilter">Scenery</label>
+                <select id="sceneFilter"><option value="all">All Scenery</option></select>
+            </div>
+            <div class="filter-group">
+                <label for="priceFilter">
+                    Max Price <span id="priceDisplay">₹5000</span>
+                </label>
+                <input type="range" id="priceFilter" min="500" max="5000" step="100" value="5000" />
+            </div>
+        </div>
+
+        <div class="grid" id="homestayGrid"></div>
+    </div>
+
+    <!-- ================= HOMESTAY PROFILE VIEW ================= -->
+    <div id="profile-view" class="hidden">
+        <button class="btn btn-back" onclick="closeProfile()">← Back to Directory</button>
+        <div class="profile-card" id="profileContainer"></div>
+    </div>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
