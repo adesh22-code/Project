@@ -144,13 +144,13 @@ function openProfile(id) {
     if (!stay) return;
 
     let buttonsHtml = '';
-    if (stay.phone) buttonsHtml += `<a href="tel:${stay.phone}" class="btn btn-call"><i class="fa-solid fa-phone"></i> Call Host</a>`;
-    if (stay.whatsapp) buttonsHtml += `<a href="https://wa.me/${stay.whatsapp}" target="_blank" class="btn btn-wa"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>`;
-    if (stay.googleMap) buttonsHtml += `<a href="${stay.googleMap}" target="_blank" class="btn btn-map"><i class="fa-solid fa-map-location-dot"></i> Google Maps</a>`;
-    if (stay.website) buttonsHtml += `<a href="${stay.website}" target="_blank" class="btn btn-web"><i class="fa-solid fa-globe"></i> Website</a>`;
-    if (stay.facebook) buttonsHtml += `<a href="${stay.facebook}" target="_blank" class="btn btn-fb"><i class="fa-brands fa-facebook"></i> Facebook</a>`;
-    if (stay.instagram) buttonsHtml += `<a href="${stay.instagram}" target="_blank" class="btn btn-ig"><i class="fa-brands fa-instagram"></i> Instagram</a>`;
-    if (stay.youtube) buttonsHtml += `<a href="${stay.youtube}" target="_blank" class="btn btn-yt"><i class="fa-brands fa-youtube"></i> Video Tour</a>`;
+    if (stay.phone) buttonsHtml += `<a href="tel:${stay.phone}" class="btn btn-call"><i class="fa-solid fa-phone"></i></a>`;
+    if (stay.whatsapp) buttonsHtml += `<a href="https://wa.me/${stay.whatsapp}" target="_blank" class="btn btn-wa"><i class="fa-brands fa-whatsapp"></i></a>`;
+    if (stay.googleMap) buttonsHtml += `<a href="${stay.googleMap}" target="_blank" class="btn btn-map"><i class="fa-solid fa-map-location-dot"></i></a>`;
+    if (stay.website) buttonsHtml += `<a href="${stay.website}" target="_blank" class="btn btn-web"><i class="fa-solid fa-globe"></i></a>`;
+    if (stay.facebook) buttonsHtml += `<a href="${stay.facebook}" target="_blank" class="btn btn-fb"><i class="fa-brands fa-facebook"></i></a>`;
+    if (stay.instagram) buttonsHtml += `<a href="${stay.instagram}" target="_blank" class="btn btn-ig"><i class="fa-brands fa-instagram"></i></a>`;
+    if (stay.youtube) buttonsHtml += `<a href="${stay.youtube}" target="_blank" class="btn btn-yt"><i class="fa-brands fa-youtube"></i></a>`;
     
     buttonsHtml += `<button class="btn btn-share" onclick="shareHomestay(${stay.id}, '${stay.name}')"><i class="fa-solid fa-share-nodes"></i> Share Stay</button>`;
 
