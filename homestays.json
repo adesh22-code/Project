@@ -4,7 +4,7 @@
         "name": "Kanchenjunga Cascade Homestay",
         "location": "Lamahatta",
         "price": 1500,
-        "scenery": ["Kanchenjunga View", "Pine Forest"],
+        "scenery": ["Kanchenjunga View", "Pine Forest", "lakeview"],
         "amenities": ["Free Wi-Fi", "Bonfire", "Home-cooked Meals", "Geyser", "riverbath"],
         "description": "Nestled in the serene pine forests of Lamahatta, this homestay offers breathtaking, unobstructed views of Mt. Kanchenjunga. Enjoy organic home-cooked meals, evening bonfires, and a peaceful retreat away from city noise. Perfect for nature lovers and couples.",
         "image": "https://images.unsplash.com/photo-1544463428-21d3e8e6ab20?auto=format&fit=crop&w=800&q=80",
