@@ -74,5 +74,19 @@
         "whatsapp": "919876543214",
         "youtube": "https://youtube.com",
         "googleMap": "https://maps.google.com/?q=Mirik"
-    }
+    },
+    {
+        "id": 6,
+        "name": "Red Maple Homestay",
+        "location": "Sonada",
+        "price": 1200,
+        "scenery": ["Pine forest", "mountain"],
+        "amenities": ["Fast Wi-Fi", "Near Mall Road", "24/7 Hot Water"],
+        "description": "A cozy, budget-friendly stay just 15 minutes walking distance from the Mall Road. Enjoy the glittering lights of Darjeeling town at night and the majestic snow-capped peaks in the morning. Fast Wi-Fi available for workation travelers.",
+        "image": "https://images.unsplash.com/photo-1626014903706-5381ce5b5b04?auto=format&fit=crop&w=800&q=80",
+        "phone": "+918170081824",
+        "whatsapp": "918170081824",
+        "facebook": "https://facebook.com",
+        "googleMap": "https://maps.google.com/?q=Darjeeling"
+    },
 ]
