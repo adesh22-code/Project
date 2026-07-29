@@ -13,7 +13,11 @@ async function loadHomestaysData() {
         initializeApp();
     } catch (error) {
         console.error('Error:', error);
-        document.getElementById('homestayGrid').innerHTML = '<div class="no-results">Failed to load homestay data. Please use a local server (like Live Server) or upload to a host.</div>';
+        document.getElementById('homestayGrid').innerHTML = `
+            <div class="no-results">
+                <i class="fa-solid fa-circle-exclamation" style="font-size: 2rem; color: #dc2626; margin-bottom: 1rem;"></i><br/>
+                Failed to load homestay data. Please use a local server (e.g., VS Code Live Server).
+            </div>`;
     }
 }
 
@@ -26,13 +30,19 @@ function toggleTheme() {
     body.classList.toggle('dark-mode');
     
     if (body.classList.contains('dark-mode')) {
-        btn.textContent = '☀️ Light Mode';
+        btn.innerHTML = '<i class="fa-solid fa-sun"></i> <span>Light Mode</span>';
     } else {
-        btn.textContent = '🌙 Dark Mode';
+        btn.innerHTML = '<i class="fa-solid fa-moon"></i> <span>Dark Mode</span>';
     }
 }
 
-
+function shareHomestay(id, name) {
+    const shareUrl = `${window.location.origin}${window.location.pathname}?id=${id}`;
+    
+    navigator.clipboard.writeText(shareUrl).then(() => {
+        alert(`Direct link for "${name}" copied to clipboard!`);
+    });
+}
 
 // ==========================================
 // 3. LOGIC: EQUAL CHANCE ROTATION
@@ -51,29 +61,6 @@ function initializeRotation() {
     activeHomestays = allHomestaysData.filter(h => currentBatchIds.includes(h.id));
 }
 
-async function shareHomestay(id, name, location) {
-    const baseUrl = window.location.origin + window.location.pathname;
-    const shareUrl = `${baseUrl}?id=${id}`;
-
-    // Check if the browser supports the native device share menu (Mobile & Modern Browsers)
-    if (navigator.share) {
-        try {
-            await navigator.share({
-                title: name,
-                text: `Check out ${name} in ${location}!`,
-                url: shareUrl,
-            });
-        } catch (error) {
-            // User cancelled or share failed
-            console.log('Sharing cancelled or failed', error);
-        }
-    } else {
-        // Fallback for older desktop browsers that don't support native sharing
-        navigator.clipboard.writeText(shareUrl).then(() => {
-            alert(`Direct link for "${name}" copied to clipboard!`);
-        });
-    }
-}
 // ==========================================
 // 4. DOM & RENDERING
 // ==========================================
@@ -95,24 +82,38 @@ function setupDropdowns() {
 function renderCards(data) {
     grid.innerHTML = '';
     if (data.length === 0) {
-        grid.innerHTML = '<div class="no-results">No homestays match your search criteria.</div>';
+        grid.innerHTML = `
+            <div class="no-results">
+                <i class="fa-solid fa-magnifying-glass" style="font-size: 2rem; margin-bottom: 1rem;"></i><br/>
+                No homestays match your search criteria. Try adjusting your filters.
+            </div>`;
         return;
     }
 
     data.forEach(stay => {
-        const tagsHtml = stay.scenery ? stay.scenery.map(s => `<span class="tag">🌿 ${s}</span>`).join('') : '';
+        const tagsHtml = stay.scenery 
+            ? stay.scenery.map(s => `<span class="tag"><i class="fa-solid fa-mountain-sun"></i> ${s}</span>`).join('') 
+            : '';
         
         grid.innerHTML += `
             <div class="card">
-                <img src="${stay.image}" alt="${stay.name}" class="card-img" />
+                <div class="card-img-wrapper">
+                    <img src="${stay.image}" alt="${stay.name}" class="card-img" />
+                    <span class="badge-location">
+                        <i class="fa-solid fa-location-dot"></i> ${stay.location}
+                    </span>
+                    <span class="badge-price">
+                        ₹${stay.price} <span>/ night</span>
+                    </span>
+                </div>
                 <div class="card-content">
                     <div class="card-header">
                         <h2>${stay.name}</h2>
-                        <div class="card-location">📍 ${stay.location}</div>
                     </div>
-                    <div class="price-tag">₹${stay.price} <span>/ night</span></div>
                     <div class="tags">${tagsHtml}</div>
-                    <button class="btn btn-primary" onclick="openProfile(${stay.id})">View Details</button>
+                    <button class="btn btn-primary" onclick="openProfile(${stay.id})">
+                        Explore Stay <i class="fa-solid fa-arrow-right"></i>
+                    </button>
                 </div>
             </div>
         `;
@@ -123,24 +124,22 @@ function renderCards(data) {
 // 5. PROFILE PAGE SPA NAVIGATION
 // ==========================================
 function openProfile(id) {
-    // Look up from allHomestaysData so shared links work even if outside current rotation batch
     const stay = allHomestaysData.find(s => s.id === id);
     if (!stay) return;
 
     let buttonsHtml = '';
-    if (stay.phone) buttonsHtml += `<a href="tel:${stay.phone}" class="btn btn-call">📞 Call Now</a>`;
-    if (stay.whatsapp) buttonsHtml += `<a href="https://wa.me/${stay.whatsapp}" target="_blank" class="btn btn-wa">💬 WhatsApp</a>`;
-    if (stay.googleMap) buttonsHtml += `<a href="${stay.googleMap}" target="_blank" class="btn btn-map">📍 Map</a>`;
-    if (stay.website) buttonsHtml += `<a href="${stay.website}" target="_blank" class="btn btn-web">🌐 Website</a>`;
-    if (stay.facebook) buttonsHtml += `<a href="${stay.facebook}" target="_blank" class="btn btn-fb">Facebook</a>`;
-    if (stay.instagram) buttonsHtml += `<a href="${stay.instagram}" target="_blank" class="btn btn-ig">Instagram</a>`;
-    if (stay.youtube) buttonsHtml += `<a href="${stay.youtube}" target="_blank" class="btn btn-yt">📺 you tube</a>`;
+    if (stay.phone) buttonsHtml += `<a href="tel:${stay.phone}" class="btn btn-call"><i class="fa-solid fa-phone"></i> Call Host</a>`;
+    if (stay.whatsapp) buttonsHtml += `<a href="https://wa.me/${stay.whatsapp}" target="_blank" class="btn btn-wa"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>`;
+    if (stay.googleMap) buttonsHtml += `<a href="${stay.googleMap}" target="_blank" class="btn btn-map"><i class="fa-solid fa-map-location-dot"></i> Google Maps</a>`;
+    if (stay.website) buttonsHtml += `<a href="${stay.website}" target="_blank" class="btn btn-web"><i class="fa-solid fa-globe"></i> Website</a>`;
+    if (stay.facebook) buttonsHtml += `<a href="${stay.facebook}" target="_blank" class="btn btn-fb"><i class="fa-brands fa-facebook"></i> Facebook</a>`;
+    if (stay.instagram) buttonsHtml += `<a href="${stay.instagram}" target="_blank" class="btn btn-ig"><i class="fa-brands fa-instagram"></i> Instagram</a>`;
+    if (stay.youtube) buttonsHtml += `<a href="${stay.youtube}" target="_blank" class="btn btn-yt"><i class="fa-brands fa-youtube"></i> Video Tour</a>`;
     
-    // Pass ID and Name to the share function
-    buttonsHtml += `<button class="btn btn-share" onclick="shareHomestay(${stay.id}, '${stay.name}')">🔗 Share</button>`;
+    buttonsHtml += `<button class="btn btn-share" onclick="shareHomestay(${stay.id}, '${stay.name}')"><i class="fa-solid fa-share-nodes"></i> Share Stay</button>`;
 
-    const sceneryTags = stay.scenery ? stay.scenery.map(s => `<span class="tag">🌿 ${s}</span>`).join('') : '';
-    const amenityTags = stay.amenities ? stay.amenities.map(a => `<span class="tag tag-amenity">✨ ${a}</span>`).join('') : '';
+    const sceneryTags = stay.scenery ? stay.scenery.map(s => `<span class="tag"><i class="fa-solid fa-mountain-sun"></i> ${s}</span>`).join('') : '';
+    const amenityTags = stay.amenities ? stay.amenities.map(a => `<span class="tag tag-amenity"><i class="fa-solid fa-circle-check"></i> ${a}</span>`).join('') : '';
 
     document.getElementById('profileContainer').innerHTML = `
         <img src="${stay.image}" alt="${stay.name}" class="profile-hero" />
@@ -148,20 +147,20 @@ function openProfile(id) {
             <div class="profile-header">
                 <div class="profile-title">
                     <h2>${stay.name}</h2>
-                    <div class="card-location" style="font-size:1.1rem;">📍 ${stay.location}</div>
+                    <div class="profile-location"><i class="fa-solid fa-location-dot"></i> ${stay.location}</div>
                 </div>
-                <div class="price-tag" style="font-size:1.8rem; margin:0;">
-                    ₹${stay.price} <span style="font-size:1rem;">/ night</span>
+                <div class="profile-price">
+                    ₹${stay.price} <span>per night</span>
                 </div>
             </div>
             
-            <div class="tags" style="margin-bottom: 1.5rem;">${sceneryTags} ${amenityTags}</div>
+            <div class="profile-section-title">Highlights & Amenities</div>
+            <div class="tags" style="margin-bottom: 2rem;">${sceneryTags} ${amenityTags}</div>
             
-            <div class="profile-desc">
-                <strong>About this homestay:</strong><br/>
-                ${stay.description}
-            </div>
+            <div class="profile-section-title">About this Homestay</div>
+            <p class="profile-desc">${stay.description}</p>
 
+            <div class="profile-section-title">Connect & Reserve</div>
             <div class="profile-actions">
                 ${buttonsHtml}
             </div>
@@ -176,7 +175,6 @@ function openProfile(id) {
 function closeProfile() {
     document.getElementById('profile-view').classList.add('hidden');
     document.getElementById('main-view').classList.remove('hidden');
-    // Clear URL parameter when going back to directory
     window.history.replaceState({}, document.title, window.location.pathname);
     window.scrollTo(0, 0);
 }
@@ -228,3 +226,4 @@ function initializeApp() {
 }
 
 loadHomestaysData();
+        
