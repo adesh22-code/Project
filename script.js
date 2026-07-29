@@ -33,18 +33,7 @@ function toggleTheme() {
 }
 
 
-function shareHomestay(id, name) {
-    // Ensures clean extraction of origin and pathname for GitHub Pages
-    const baseUrl = window.location.origin + window.location.pathname;
-    const shareUrl = `${baseUrl}?id=${id}`;
-    
-    navigator.clipboard.writeText(shareUrl).then(() => {
-        alert(`Direct link for "${name}" copied to clipboard!`);
-    }).catch(err => {
-        console.error('Failed to copy: ', err);
-        prompt("Copy this link:", shareUrl);
-    });
-}
+
 // ==========================================
 // 3. LOGIC: EQUAL CHANCE ROTATION
 // ==========================================
@@ -62,6 +51,29 @@ function initializeRotation() {
     activeHomestays = allHomestaysData.filter(h => currentBatchIds.includes(h.id));
 }
 
+async function shareHomestay(id, name, location) {
+    const baseUrl = window.location.origin + window.location.pathname;
+    const shareUrl = `${baseUrl}?id=${id}`;
+
+    // Check if the browser supports the native device share menu (Mobile & Modern Browsers)
+    if (navigator.share) {
+        try {
+            await navigator.share({
+                title: name,
+                text: `Check out ${name} in ${location}!`,
+                url: shareUrl,
+            });
+        } catch (error) {
+            // User cancelled or share failed
+            console.log('Sharing cancelled or failed', error);
+        }
+    } else {
+        // Fallback for older desktop browsers that don't support native sharing
+        navigator.clipboard.writeText(shareUrl).then(() => {
+            alert(`Direct link for "${name}" copied to clipboard!`);
+        });
+    }
+}
 // ==========================================
 // 4. DOM & RENDERING
 // ==========================================
