@@ -134,7 +134,7 @@ function openProfile(id) {
     if (stay.website) buttonsHtml += `<a href="${stay.website}" target="_blank" class="btn btn-web">🌐 Website</a>`;
     if (stay.facebook) buttonsHtml += `<a href="${stay.facebook}" target="_blank" class="btn btn-fb">Facebook</a>`;
     if (stay.instagram) buttonsHtml += `<a href="${stay.instagram}" target="_blank" class="btn btn-ig">Instagram</a>`;
-    if (stay.youtube) buttonsHtml += `<a href="${stay.youtube}" target="_blank" class="btn btn-yt">📺 Video</a>`;
+    if (stay.youtube) buttonsHtml += `<a href="${stay.youtube}" target="_blank" class="btn btn-yt">📺 you tube</a>`;
     
     // Pass ID and Name to the share function
     buttonsHtml += `<button class="btn btn-share" onclick="shareHomestay(${stay.id}, '${stay.name}')">🔗 Share</button>`;
