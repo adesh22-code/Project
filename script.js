@@ -11,6 +11,50 @@ function parseCSV(csvText) {
     const headers = lines[0].split(',').map(header => header.trim());
     
     return lines.slice(1).map(line => {
+        // Advanced parser that handles commas inside quotes OR safely splits standard columns
+        const values = [];
+        let current = '';
+        let inQuotes = false;
+        
+        for (let i = 0; i < line.length; i++) {
+            const char = line[i];
+            if (char === '"') {
+                inQuotes = !inQuotes;
+            } else if (char === ',' && !inQuotes) {
+                values.push(current.trim());
+                current = '';
+            } else {
+                current += char;
+            }
+        }
+        values.push(current.trim()); // Push the last value
+
+        const entry = {};
+
+        headers.forEach((header, index) => {
+            let val = values[index] ? values[index].replace(/^"|"$/g, '').trim() : '';
+
+            // Convert numeric fields
+            if (header === 'id' || header === 'price' || header === 'rating') {
+                val = Number(val) || 0;
+            }
+
+            // Convert comma-separated tags into arrays (for amenities and scenery)
+            if (header === 'amenities' || header === 'scenery') {
+                val = val ? val.split(',').map(item => item.trim()) : [];
+            }
+
+            entry[header] = val;
+        });
+
+        return entry;
+    });
+}
+/*function parseCSV(csvText) {
+    const lines = csvText.trim().split('\n');
+    const headers = lines[0].split(',').map(header => header.trim());
+    
+    return lines.slice(1).map(line => {
         // Regex to handle values inside quotes properly
         const values = line.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g) || line.split(',');
         const entry = {};
@@ -33,7 +77,7 @@ function parseCSV(csvText) {
 
         return entry;
     });
-}
+}*/
 
 async function loadHomestayData() {
     try {
