@@ -64,7 +64,7 @@ async function shareHomestay(id, name, location) {
 // 3. LOGIC: EQUAL CHANCE ROTATION
 // ==========================================
 function initializeRotation() {
-    const BATCH_SIZE = 10; 
+    const BATCH_SIZE = 3; 
     let unshownIds = JSON.parse(sessionStorage.getItem('unshownHomestays'));
 
     if (!unshownIds || unshownIds.length === 0) {
