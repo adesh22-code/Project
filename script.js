@@ -46,6 +46,7 @@ async function shareHomestay(id, name, location) {
             await navigator.share({
                 title: name,
                 text: `Check out ${name} in ${location}!`,
+                url: shareUrl,
             });
         } catch (error) {
             // User cancelled or share failed
