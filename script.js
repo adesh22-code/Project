@@ -4,7 +4,7 @@ let activeHomestays = [];
 // ==========================================
 // 1. FETCH JSON DATA FROM EXTERNAL FILE
 // ==========================================
-async function loadHomestaysData() {
+/*async function loadHomestaysData() {
     try {
         const response = await fetch('homestays.json');
         if (!response.ok) throw new Error('Failed to load homestay data.');
@@ -19,7 +19,63 @@ async function loadHomestaysData() {
                 Failed to load homestay data. Please use a local server (e.g., VS Code Live Server).
             </div>`;
     }
+}*/
+
+// Replace this string with your actual published CSV link from Step 2
+const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTWXIyW8Zk4YXmIK4Bl1g2cMIIWBEOaaIrfSM2zaWsTr63lmc0Td8lDm2kY11Ap2w/pub?gid=942226858&single=true&output=csv';
+
+let homestays = [];
+
+// Helper function to turn raw CSV text into a structured JavaScript array
+function parseCSV(csvText) {
+    const lines = csvText.trim().split('\n');
+    const headers = lines[0].split(',').map(header => header.trim());
+    
+    return lines.slice(1).map(line => {
+        // Basic regex to handle commas inside quoted text values if any
+        const values = line.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g) || line.split(',');
+        const entry = {};
+
+        headers.forEach((header, index) => {
+            let val = values[index] ? values[index].replace(/^"|"$/g, '').trim() : '';
+
+            // Convert string numbers into actual Javascript numbers
+            if (header === 'id' || header === 'price' || header === 'rating') {
+                val = Number(val);
+            }
+
+            // Convert comma-separated string into an array for amenities
+            if (header === 'amenities') {
+                val = val ? val.split(',').map(item => item.trim()) : [];
+            }
+
+            entry[header] = val;
+        });
+
+        return entry;
+    });
 }
+
+// Fetch data directly from Google Sheets
+async function loadHomestayData() {
+    try {
+        const response = await fetch(SHEET_CSV_URL);
+        const csvData = await response.text();
+        
+        // Parse CSV to objects
+        homestays = parseCSV(csvData);
+        
+        // Call your existing rendering functions here
+        renderHomestays(homestays); 
+        checkUrlParams(); // Deep-linking handler
+    } catch (error) {
+        console.error("Error loading data from Google Sheets:", error);
+    }
+}
+
+// Call load on page start
+document.addEventListener('DOMContentLoaded', loadHomestayData);
+
 
 // ==========================================
 // 2. LOGIC: THEME TOGGLE & SHARE
