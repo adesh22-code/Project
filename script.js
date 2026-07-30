@@ -45,7 +45,7 @@ async function shareHomestay(id, name, location) {
         try {
             await navigator.share({
                 title: name,
-                text: `Check out ${name} in ${location}!`,
+                text: `Check out ${name}`,
                 url: shareUrl,
             });
         } catch (error) {
