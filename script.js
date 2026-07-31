@@ -289,25 +289,31 @@ function openProfile(id) {
     
     buttonsHtml += `<button class="btn btn-share" onclick="shareHomestay(${stay.id}, '${stay.name}', '${stay.location}')"><i class="fa-solid fa-share-nodes"></i> Share Stay</button>`;
 
-    // Group Scenery into a single card container
-    const sceneryHtml = stay.scenery && stay.scenery.length > 0 ? `
-        <div class="feature-card">
-            <div class="feature-card-badge"><i class="fa-solid fa-mountain-sun"></i> Scenery & Views</div>
-            <h3>Surrounding Landscapes</h3>
-            <div class="tags">
-                ${stay.scenery.map(s => `<span class="tag"><i class="fa-solid fa-mountain-sun"></i> ${s}</span>`).join('')}
-            </div>
-        </div>
-    ` : '';
+    const hasScenery = stay.scenery && stay.scenery.length > 0;
+    const hasAmenities = stay.amenities && stay.amenities.length > 0;
 
-    // Group Amenities into a single card container
-    const amenitiesHtml = stay.amenities && stay.amenities.length > 0 ? `
+    const combinedFeaturesHtml = (hasScenery || hasAmenities) ? `
         <div class="feature-card">
-            <div class="feature-card-badge"><i class="fa-solid fa-circle-check"></i> Facilities</div>
-            <h3>Amenities & Comforts</h3>
-            <div class="tags">
-                ${stay.amenities.map(a => `<span class="tag tag-amenity"><i class="fa-solid fa-circle-check"></i> ${a}</span>`).join('')}
-            </div>
+            <div class="feature-card-badge"><i class="fa-solid fa-star"></i> Overview</div>
+            <h3>Property Features</h3>
+            
+            ${hasScenery ? `
+                <div style="margin-bottom: ${hasAmenities ? '1.5rem' : '0'};">
+                    <p style="font-size: 0.85rem; font-weight: 700; text-transform: uppercase; color: var(--accent); margin-bottom: 0.5rem; letter-spacing: 0.05em;"><i class="fa-solid fa-mountain-sun"></i> Surrounding Landscapes</p>
+                    <div class="tags">
+                        ${stay.scenery.map(s => `<span class="tag"><i class="fa-solid fa-mountain-sun"></i> ${s}</span>`).join('')}
+                    </div>
+                </div>
+            ` : ''}
+
+            ${hasAmenities ? `
+                <div>
+                    <p style="font-size: 0.85rem; font-weight: 700; text-transform: uppercase; color: var(--accent); margin-bottom: 0.5rem; letter-spacing: 0.05em;"><i class="fa-solid fa-circle-check"></i> Amenities & Comforts</p>
+                    <div class="tags">
+                        ${stay.amenities.map(a => `<span class="tag tag-amenity"><i class="fa-solid fa-circle-check"></i> ${a}</span>`).join('')}
+                    </div>
+                </div>
+            ` : ''}
         </div>
     ` : '';
 
@@ -325,8 +331,7 @@ function openProfile(id) {
                     </div>
                 </div>
                 
-                ${sceneryHtml}
-                ${amenitiesHtml}
+                ${combinedFeaturesHtml}
                 
                 <div class="profile-section-title">About this Homestay</div>
                 <p class="profile-desc">${stay.description || 'No description provided.'}</p>
