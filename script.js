@@ -280,7 +280,6 @@ function openProfile(id) {
     if (stay.phone) buttonsHtml += `<a href="tel:${stay.phone}" class="btn btn-call"><i class="fa-solid fa-phone"></i></a>`;
     if (stay.whatsapp) buttonsHtml += `<a href="https://wa.me/${stay.whatsapp}" target="_blank" class="btn btn-wa"><i class="fa-brands fa-whatsapp"></i></a>`;
     
-    // Support both mapLink or googleMap column headers from Google Sheet
     const mapUrl = stay.mapLink || stay.googleMap;
     if (mapUrl) buttonsHtml += `<a href="${mapUrl}" target="_blank" class="btn btn-map"><i class="fa-solid fa-map-location-dot"></i></a>`;
     
@@ -291,11 +290,23 @@ function openProfile(id) {
     
     buttonsHtml += `<button class="btn btn-share" onclick="shareHomestay(${stay.id}, '${stay.name}', '${stay.location}')"><i class="fa-solid fa-share-nodes"></i> Share Stay</button>`;
 
-    const sceneryTags = stay.scenery && stay.scenery.length > 0 ? stay.scenery.map(s => `<span class="tag"><i class="fa-solid fa-mountain-sun"></i> ${s}</span>`).join('') : '';
-    const amenityTags = stay.amenities && stay.amenities.length > 0 ? stay.amenities.map(a => `<span class="tag tag-amenity"><i class="fa-solid fa-circle-check"></i> ${a}</span>`).join('') : '';
+    // Render scenery and amenities into separate structured card containers if they exist
+    const sceneryHtml = stay.scenery && stay.scenery.length > 0 ? `
+        <div class="profile-section-title"><i class="fa-solid fa-mountain-sun"></i> Scenery & Views</div>
+        <div class="tags" style="margin-bottom: 1.5rem;">
+            ${stay.scenery.map(s => `<span class="tag"><i class="fa-solid fa-mountain-sun"></i> ${s}</span>`).join('')}
+        </div>
+    ` : '';
+
+    const amenitiesHtml = stay.amenities && stay.amenities.length > 0 ? `
+        <div class="profile-section-title"><i class="fa-solid fa-circle-check"></i> Amenities & Facilities</div>
+        <div class="tags" style="margin-bottom: 2rem;">
+            ${stay.amenities.map(a => `<span class="tag tag-amenity"><i class="fa-solid fa-circle-check"></i> ${a}</span>`).join('')}
+        </div>
+    ` : '';
 
     document.getElementById('profileContainer').innerHTML = `
-        <div class="profile-card-wrapper">
+        <div class="profile-card">
             <img src="${stay.image}" alt="${stay.name}" class="profile-hero" />
             <div class="profile-body">
                 <div class="profile-header">
@@ -304,12 +315,12 @@ function openProfile(id) {
                         <div class="profile-location"><i class="fa-solid fa-location-dot"></i> ${stay.location}</div>
                     </div>
                     <div class="profile-price">
-                        ₹${stay.price} <span class="per-night">per night</span>
+                        ₹${stay.price} <span>per night</span>
                     </div>
                 </div>
                 
-                <div class="profile-section-title">Highlights & Amenities</div>
-                <div class="tags" style="margin-bottom: 2rem;">${sceneryTags} ${amenityTags}</div>
+                ${sceneryHtml}
+                ${amenitiesHtml}
                 
                 <div class="profile-section-title">About this Homestay</div>
                 <p class="profile-desc">${stay.description || 'No description provided.'}</p>
@@ -326,6 +337,7 @@ function openProfile(id) {
     document.getElementById('profile-view').classList.remove('hidden');
     window.scrollTo(0, 0); 
 }
+
 
 
 function closeProfile() {
