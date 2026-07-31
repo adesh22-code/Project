@@ -292,7 +292,8 @@ function openProfile(id) {
     // Group Scenery into a single card container
     const sceneryHtml = stay.scenery && stay.scenery.length > 0 ? `
         <div class="feature-card">
-            <div class="profile-section-title"><i class="fa-solid fa-mountain-sun"></i> Scenery & Views</div>
+            <div class="feature-card-badge"><i class="fa-solid fa-mountain-sun"></i> Scenery & Views</div>
+            <h3>Surrounding Landscapes</h3>
             <div class="tags">
                 ${stay.scenery.map(s => `<span class="tag"><i class="fa-solid fa-mountain-sun"></i> ${s}</span>`).join('')}
             </div>
@@ -302,7 +303,8 @@ function openProfile(id) {
     // Group Amenities into a single card container
     const amenitiesHtml = stay.amenities && stay.amenities.length > 0 ? `
         <div class="feature-card">
-            <div class="profile-section-title"><i class="fa-solid fa-circle-check"></i> Amenities & Facilities</div>
+            <div class="feature-card-badge"><i class="fa-solid fa-circle-check"></i> Facilities</div>
+            <h3>Amenities & Comforts</h3>
             <div class="tags">
                 ${stay.amenities.map(a => `<span class="tag tag-amenity"><i class="fa-solid fa-circle-check"></i> ${a}</span>`).join('')}
             </div>
