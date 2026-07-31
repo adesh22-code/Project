@@ -271,7 +271,6 @@ function renderCards(data) {
     document.getElementById('profile-view').classList.remove('hidden');
     window.scrollTo(0, 0); 
 }*/
-
 function openProfile(id) {
     const stay = allHomestaysData.find(s => s.id === id);
     if (!stay) return;
@@ -290,18 +289,23 @@ function openProfile(id) {
     
     buttonsHtml += `<button class="btn btn-share" onclick="shareHomestay(${stay.id}, '${stay.name}', '${stay.location}')"><i class="fa-solid fa-share-nodes"></i> Share Stay</button>`;
 
-    // Render scenery and amenities into separate structured card containers if they exist
+    // Group Scenery into a single card container
     const sceneryHtml = stay.scenery && stay.scenery.length > 0 ? `
-        <div class="profile-section-title"><i class="fa-solid fa-mountain-sun"></i> Scenery & Views</div>
-        <div class="tags" style="margin-bottom: 1.5rem;">
-            ${stay.scenery.map(s => `<span class="tag"><i class="fa-solid fa-mountain-sun"></i> ${s}</span>`).join('')}
+        <div class="feature-card">
+            <div class="profile-section-title"><i class="fa-solid fa-mountain-sun"></i> Scenery & Views</div>
+            <div class="tags">
+                ${stay.scenery.map(s => `<span class="tag"><i class="fa-solid fa-mountain-sun"></i> ${s}</span>`).join('')}
+            </div>
         </div>
     ` : '';
 
+    // Group Amenities into a single card container
     const amenitiesHtml = stay.amenities && stay.amenities.length > 0 ? `
-        <div class="profile-section-title"><i class="fa-solid fa-circle-check"></i> Amenities & Facilities</div>
-        <div class="tags" style="margin-bottom: 2rem;">
-            ${stay.amenities.map(a => `<span class="tag tag-amenity"><i class="fa-solid fa-circle-check"></i> ${a}</span>`).join('')}
+        <div class="feature-card">
+            <div class="profile-section-title"><i class="fa-solid fa-circle-check"></i> Amenities & Facilities</div>
+            <div class="tags">
+                ${stay.amenities.map(a => `<span class="tag tag-amenity"><i class="fa-solid fa-circle-check"></i> ${a}</span>`).join('')}
+            </div>
         </div>
     ` : '';
 
@@ -339,6 +343,8 @@ function openProfile(id) {
 }
 
 
+
+    
 
 function closeProfile() {
     document.getElementById('profile-view').classList.add('hidden');
