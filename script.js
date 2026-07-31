@@ -271,7 +271,7 @@ function renderCards(data) {
     document.getElementById('profile-view').classList.remove('hidden');
     window.scrollTo(0, 0); 
 }*/
-function openProfile(id) {
+/*function openProfile(id) {
     const stay = allHomestaysData.find(s => s.id === id);
     if (!stay) return;
 
@@ -357,6 +357,171 @@ function closeProfile() {
     document.getElementById('profile-view').classList.add('hidden');
     document.getElementById('main-view').classList.remove('hidden');
     window.history.replaceState({}, document.title, window.location.pathname);
+    window.scrollTo(0, 0);
+}*/
+
+
+function openProfile(id) {
+    const stay = allHomestaysData.find(s => s.id === id);
+    if (!stay) return;
+
+    // Build buttons HTML
+    let buttonsHtml = '';
+    if (stay.phone) buttonsHtml += `<a href="tel:${stay.phone}" class="bg-brand-700 hover:bg-brand-800 text-white px-5 py-2.5 rounded-full text-sm font-semibold transition shadow-md">Book Stay</a>`;
+    if (stay.whatsapp) buttonsHtml += `<a href="https://wa.me/${stay.whatsapp}" target="_blank" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2.5 rounded-full text-sm font-semibold transition shadow-sm flex items-center gap-2">WhatsApp</a>`;
+
+    const mapUrl = stay.mapLink || stay.googleMap;
+    const mapButtonHtml = mapUrl ? `<a href="${mapUrl}" target="_blank" class="inline-flex items-center gap-2 bg-slate-900 hover:bg-brand-700 text-white px-6 py-3 rounded-full text-sm font-semibold transition shadow-md">Open in Google Maps</a>` : '';
+
+    // Generate Scenery tags
+    const sceneryHtml = stay.scenery && stay.scenery.length > 0 
+        ? stay.scenery.map(s => `<span class="bg-white/10 text-emerald-100 border border-white/15 px-3 py-1.5 rounded-full text-sm inline-flex items-center gap-1.5">${s}</span>`).join('')
+        : `<span class="text-slate-400 text-sm">No scenery details specified.</span>`;
+
+    // Generate Amenities tags
+    const amenitiesHtml = stay.amenities && stay.amenities.length > 0 
+        ? stay.amenities.map(a => `<span class="bg-white/10 text-emerald-100 border border-white/15 px-3 py-1.5 rounded-full text-sm inline-flex items-center gap-1.5">${a}</span>`).join('')
+        : `<span class="text-slate-400 text-sm">No amenities specified.</span>`;
+
+    // Inject the layout template into your profile container
+    document.getElementById('profileContainer').innerHTML = `
+        <div class="bg-brand-50 text-slate-800 font-sans antialiased">
+            <!-- Header Bar with Back Button -->
+            <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-brand-100">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+                    <button onclick="closeProfile()" class="font-serif text-xl font-bold tracking-tight text-brand-700 flex items-center gap-2 hover:text-brand-600 transition">
+                        &larr; Back to Listings
+                    </button>
+                    <div class="flex items-center gap-4">
+                        ${stay.whatsapp ? `<a href="https://wa.me/${stay.whatsapp}" target="_blank" class="hidden sm:inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2.5 rounded-full text-sm font-semibold transition">WhatsApp</a>` : ''}
+                        ${stay.phone ? `<a href="tel:${stay.phone}" class="bg-brand-700 hover:bg-brand-800 text-white px-5 py-2.5 rounded-full text-sm font-semibold transition">Book Stay</a>` : ''}
+                    </div>
+                </div>
+            </header>
+
+            <!-- Hero Section -->
+            <section class="relative min-h-[75vh] flex items-center justify-center bg-slate-900 overflow-hidden">
+                <div class="absolute inset-0 z-0">
+                    <img src="${stay.image}" alt="${stay.name}" class="w-full h-full object-cover object-center opacity-75">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20"></div>
+                </div>
+                <div class="relative z-10 max-w-5xl mx-auto px-4 text-center text-white py-20">
+                    <span class="inline-block py-1.5 px-4 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-xs sm:text-sm font-semibold tracking-wider uppercase mb-6 text-brand-100">
+                        Exclusive Mountain Retreat
+                    </span>
+                    <h1 class="font-serif text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight mb-6 leading-tight">
+                        ${stay.name}
+                    </h1>
+                    <p class="text-lg sm:text-xl text-slate-200 max-w-2xl mx-auto font-light mb-10 leading-relaxed">
+                        ${stay.description || 'Disconnect from the chaos and immerse yourself in pristine nature, luxurious cozy living, and unmatched hospitality.'}
+                    </p>
+                </div>
+            </section>
+
+            <!-- Quick Details Bar -->
+            <section class="bg-white border-b border-brand-100 py-6">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-2 md:grid-cols-3 gap-6 text-center">
+                    <div class="border-r last:border-none border-slate-100">
+                        <span class="block text-xs uppercase tracking-widest text-slate-400 font-semibold mb-1">Starting Price</span>
+                        <span class="text-2xl font-bold font-serif text-brand-700">₹${stay.price} <span class="text-sm font-sans font-normal text-slate-500">/ night</span></span>
+                    </div>
+                    <div class="border-r last:border-none border-slate-100">
+                        <span class="block text-xs uppercase tracking-widest text-slate-400 font-semibold mb-1">Location</span>
+                        <span class="text-lg font-bold text-slate-700 truncate">${stay.location}</span>
+                    </div>
+                    <div>
+                        <span class="block text-xs uppercase tracking-widest text-slate-400 font-semibold mb-1">Guest Rating</span>
+                        <span class="text-lg font-bold text-amber-500">&#9733; 4.9 / 5.0</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- About Section -->
+            <section class="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                    <div class="space-y-6">
+                        <span class="text-brand-600 font-semibold uppercase tracking-wider text-sm">Welcome Home</span>
+                        <h2 class="font-serif text-3xl sm:text-4xl font-bold text-slate-900 leading-snug">
+                            A Peaceful Escape Crafted for Unforgettable Memories
+                        </h2>
+                        <p class="text-slate-600 leading-relaxed text-lg">
+                            ${stay.description || 'Nestled right against the rolling green foothills, this property combines rustic charm with modern luxury.'}
+                        </p>
+                    </div>
+                    <div>
+                        <img src="${stay.image}" alt="${stay.name}" class="rounded-2xl shadow-lg w-full h-80 object-cover">
+                    </div>
+                </div>
+            </section>
+
+            <!-- Combined Scenery & Amenities Dark Theme Cards -->
+            <section class="bg-brand-800 text-white py-20">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center max-w-2xl mx-auto mb-16">
+                        <span class="text-amber-400 font-semibold uppercase tracking-wider text-sm">Property Features</span>
+                        <h2 class="font-serif text-3xl sm:text-4xl font-bold mt-2">Scenery & Amenities</h2>
+                        <p class="text-slate-300 mt-3">Everything you need for a comfortable, seamless, and scenic getaway.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <!-- Scenery Card -->
+                        <div class="bg-[#0b1c14] border border-[#1c3529] rounded-2xl p-8 shadow-xl">
+                            <div class="inline-flex items-center gap-2 bg-amber-500/15 border border-amber-500 text-amber-400 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-4">
+                                Landscapes
+                            </div>
+                            <h3 class="font-serif text-2xl font-semibold mb-4 text-white">Surrounding Scenery</h3>
+                            <div class="flex flex-wrap gap-2">
+                                ${sceneryHtml}
+                            </div>
+                        </div>
+
+                        <!-- Amenities Card -->
+                        <div class="bg-[#0b1c14] border border-[#1c3529] rounded-2xl p-8 shadow-xl">
+                            <div class="inline-flex items-center gap-2 bg-amber-500/15 border border-amber-500 text-amber-400 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-4">
+                                Comforts
+                            </div>
+                            <h3 class="font-serif text-2xl font-semibold mb-4 text-white">Amenities & Facilities</h3>
+                            <div class="flex flex-wrap gap-2">
+                                ${amenitiesHtml}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Location Section -->
+            <section class="bg-white py-20 border-t border-brand-100">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                        <div class="space-y-6">
+                            <span class="text-brand-600 font-semibold uppercase tracking-wider text-sm">Find Us</span>
+                            <h2 class="font-serif text-3xl sm:text-4xl font-bold text-slate-900">
+                                Easily Accessible, Perfectly Secluded
+                            </h2>
+                            <p class="text-slate-600 leading-relaxed">
+                                Located in ${stay.location}. Detailed driving instructions and private transfer options are provided upon booking confirmation.
+                            </p>
+                            <div>
+                                ${mapButtonHtml}
+                            </div>
+                        </div>
+                        <div class="h-96 rounded-2xl overflow-hidden shadow-xl border border-slate-200 bg-slate-100 flex items-center justify-center">
+                            <div class="text-slate-400 font-medium">Map Location View</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    `;
+
+    document.getElementById('main-view').classList.add('hidden');
+    document.getElementById('profile-view').classList.remove('hidden');
+    window.scrollTo(0, 0); 
+}
+
+function closeProfile() {
+    document.getElementById('profile-view').classList.add('hidden');
+    document.getElementById('main-view').classList.remove('hidden');
     window.scrollTo(0, 0);
 }
 
