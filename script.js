@@ -359,7 +359,7 @@ function closeProfile() {
 function filterData() {
     const searchText = searchInput.value.toLowerCase().trim();
     const selectedLoc = locationFilter.value;
-    const selectedScene = sceneFilter.value;
+    /*const selectedScene = sceneFilter.value;*/
     const maxPrice = parseInt(priceFilter.value) || 5000;
 
     priceDisplay.textContent = `₹${maxPrice}`;
@@ -368,10 +368,10 @@ function filterData() {
         const matchesSearch = stay.name.toLowerCase().includes(searchText) || 
                               stay.location.toLowerCase().includes(searchText);
         const matchesLoc = selectedLoc === 'all' || stay.location === selectedLoc;
-        const matchesScene = selectedScene === 'all' || (stay.scenery && stay.scenery.includes(selectedScene));
+        /*const matchesScene = selectedScene === 'all' || (stay.scenery && stay.scenery.includes(selectedScene));*/
         const matchesPrice = stay.price <= maxPrice;
 
-        return matchesSearch && matchesLoc && matchesScene && matchesPrice;
+        return matchesSearch && matchesLoc /*&& matchesScene*/ && matchesPrice;
     });
 
     renderCards(filtered);
