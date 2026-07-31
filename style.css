@@ -1,130 +1,6 @@
 /* ==========================================
-   RESET & LUXURY THEMING
+   RESET & BASE VARIABLES
    ========================================== */
-/*details*/
-/* Container Wrapper Card */
-.profile-card-wrapper {
-    background: #ffffff;
-    max-width: 850px;
-    margin: 20px auto;
-    border-radius: 16px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-    overflow: hidden;
-}
-
-/* Hero Image Style */
-.profile-hero {
-    width: 100%;
-    height: 380px;
-    object-fit: cover;
-}
-
-/* Body Spacing */
-.profile-body {
-    padding: 30px;
-}
-
-/* Header layout alignment */
-.profile-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    border-bottom: 1px solid #eee;
-    padding-bottom: 20px;
-    margin-bottom: 20px;
-}
-
-.profile-title h2 {
-    font-size: 2rem;
-    color: #1a1a1a;
-    margin-bottom: 6px;
-}
-
-.profile-location {
-    color: #666;
-    font-size: 1rem;
-}
-
-/* Price Tag Styling */
-.profile-price {
-    font-size: 1.8rem;
-    font-weight: 700;
-    color: #b8860b;
-    background: #fdf8f0;
-    padding: 10px 16px;
-    border-radius: 10px;
-    border: 1px solid #f3e5d0;
-    text-align: right;
-}
-
-.profile-price .per-night {
-    display: block;
-    font-size: 0.75rem;
-    color: #777;
-    text-transform: uppercase;
-    font-weight: 400;
-    letter-spacing: 0.5px;
-}
-
-/* Section Headings */
-.profile-section-title {
-    font-size: 1.05rem;
-    font-weight: 600;
-    color: #333;
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
-    margin-top: 24px;
-    margin-bottom: 12px;
-}
-
-/* Description Text */
-.profile-desc {
-    color: #555;
-    line-height: 1.6;
-    font-size: 1rem;
-    margin-bottom: 20px;
-}
-
-/* Action Buttons Container */
-.profile-actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 15px;
-}
-
-.profile-actions .btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 10px 16px;
-    border-radius: 8px;
-    text-decoration: none;
-    color: #fff;
-    font-weight: 500;
-    transition: transform 0.2s ease, opacity 0.2s ease;
-}
-
-.profile-actions .btn:hover {
-    transform: translateY(-2px);
-    opacity: 0.9;
-}
-
-/* Action Button Color Branding (Optional) */
-.btn-call { background-color: #0284c7; }
-.btn-wa { background-color: #16a34a; }
-.btn-map { background-color: #0d9488; }
-.btn-web { background-color: #4f46e5; }
-.btn-fb { background-color: #1877f2; }
-.btn-ig { background-color: #e1306c; }
-.btn-yt { background-color: #dc2626; }
-.btn-share { background-color: #7c3aed; }
-
-
-/*details*/
-
-
-
 * {
     box-sizing: border-box;
     margin: 0;
@@ -608,11 +484,13 @@ body.dark-mode .btn-primary {
     overflow: hidden;
     box-shadow: var(--shadow-lg);
     border: 1px solid var(--border-color);
+    max-width: 900px;
+    margin: 0 auto;
 }
 
 .profile-hero {
     width: 100%;
-    height: 420px;
+    height: 400px;
     object-fit: cover;
 }
 
@@ -635,6 +513,7 @@ body.dark-mode .btn-primary {
     font-size: 2.2rem;
     margin-bottom: 0.4rem;
     line-height: 1.2;
+    color: var(--text-main);
 }
 
 .profile-location {
@@ -651,18 +530,28 @@ body.dark-mode .btn-primary {
     font-size: 2rem;
     font-weight: 700;
     color: var(--accent);
+    background: var(--accent-light);
+    padding: 0.75rem 1.25rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--tag-border);
     text-align: right;
 }
 
+body.dark-mode .profile-price {
+    background: var(--tag-bg);
+}
+
 .profile-price span {
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     color: var(--text-muted);
     font-weight: 400;
     display: block;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
 }
 
 .profile-section-title {
-    font-size: 1rem;
+    font-size: 0.95rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.05em;
@@ -671,10 +560,10 @@ body.dark-mode .btn-primary {
 }
 
 .profile-desc {
-    font-size: 1.1rem;
+    font-size: 1.05rem;
     color: var(--text-main);
     margin-bottom: 2rem;
-    line-height: 1.8;
+    line-height: 1.7;
 }
 
 .profile-actions {
@@ -688,6 +577,12 @@ body.dark-mode .btn-primary {
 .profile-actions .btn {
     padding: 0.75rem 1.4rem;
     font-size: 0.95rem;
+    transform: translateY(0);
+}
+
+.profile-actions .btn:hover {
+    transform: translateY(-2px);
+    opacity: 0.95;
 }
 
 /* Responsive adjustments */
@@ -697,5 +592,5 @@ body.dark-mode .btn-primary {
     .profile-header { flex-direction: column; align-items: flex-start; }
     .profile-price { text-align: left; }
     .hero { padding-bottom: 4rem; }
-    }
-                    
+}
+
