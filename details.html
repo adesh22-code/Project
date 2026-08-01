@@ -26,52 +26,61 @@
 
     <!-- Link your main data source script -->
     <script src="script.js"></script>
-    <script>
-        // 1. Get ID from URL parameter (e.g., details.html?id=2)
-        const urlParams = new URLSearchParams(window.location.search);
-        const stayId = parseInt(urlParams.get('id'));
+<script>
+    // 1. Extract the ID parameter from the URL string
+    const urlParams = new URLSearchParams(window.location.search);
+    const stayId = urlParams.get('id');
 
-        // 2. Find the stay from your global dataset
-        const stay = typeof allHomestaysData !== 'undefined' ? allHomestaysData.find(s => s.id === stayId) : null;
+    // 2. Ensure dataset is available and find the matching stay (handling string/number conversion)
+    const stay = (typeof allHomestaysData !== 'undefined') 
+        ? allHomestaysData.find(s => String(s.id) === String(stayId)) 
+        : null;
 
-        if (stay) {
-            let buttonsHtml = '';
-            if (stay.phone) buttonsHtml += `<a href="tel:${stay.phone}" class="bg-brand-700 hover:bg-brand-800 text-white px-5 py-2.5 rounded-full text-sm font-semibold transition shadow-md">Book Stay</a>`;
-            if (stay.whatsapp) buttonsHtml += `<a href="https://wa.me/${stay.whatsapp}" target="_blank" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2.5 rounded-full text-sm font-semibold transition shadow-sm flex items-center gap-2"><i class="fa-brands fa-whatsapp text-lg"></i> WhatsApp</a>`;
+    if (stay) {
+        // Build buttons HTML
+        let buttonsHtml = '';
+        if (stay.phone) buttonsHtml += `<a href="tel:${stay.phone}" class="bg-brand-700 hover:bg-brand-800 text-white px-5 py-2.5 rounded-full text-sm font-semibold transition shadow-md">Book Stay</a>`;
+        if (stay.whatsapp) buttonsHtml += `<a href="https://wa.me/${stay.whatsapp}" target="_blank" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2.5 rounded-full text-sm font-semibold transition shadow-sm flex items-center gap-2"><i class="fa-brands fa-whatsapp text-lg"></i> WhatsApp</a>`;
 
-            const mapUrl = stay.mapLink || stay.googleMap;
-            const mapButtonHtml = mapUrl ? `<a href="${mapUrl}" target="_blank" class="inline-flex items-center gap-2 bg-slate-900 hover:bg-brand-700 text-white px-6 py-3 rounded-full text-sm font-semibold transition shadow-md"><i class="fa-solid fa-map-location-dot"></i> Open in Google Maps</a>` : '';
+        const mapUrl = stay.mapLink || stay.googleMap;
+        const mapButtonHtml = mapUrl ? `<a href="${mapUrl}" target="_blank" class="inline-flex items-center gap-2 bg-slate-900 hover:bg-brand-700 text-white px-6 py-3 rounded-full text-sm font-semibold transition shadow-md"><i class="fa-solid fa-map-location-dot"></i> Open in Google Maps</a>` : '';
 
-            const sceneryHtml = stay.scenery && stay.scenery.length > 0 
-                ? stay.scenery.map(s => `<span class="bg-white/10 text-emerald-100 border border-white/15 px-3 py-1.5 rounded-full text-sm inline-flex items-center gap-1.5"><i class="fa-solid fa-mountain-sun text-amber-400"></i> ${s}</span>`).join('')
-                : `<span class="text-slate-400 text-sm">No scenery details specified.</span>`;
+        const sceneryHtml = stay.scenery && stay.scenery.length > 0 
+            ? stay.scenery.map(s => `<span class="bg-white/10 text-emerald-100 border border-white/15 px-3 py-1.5 rounded-full text-sm inline-flex items-center gap-1.5"><i class="fa-solid fa-mountain-sun text-amber-400"></i> ${s}</span>`).join('')
+            : `<span class="text-slate-400 text-sm">No scenery details specified.</span>`;
 
-            const amenitiesHtml = stay.amenities && stay.amenities.length > 0 
-                ? stay.amenities.map(a => `<span class="bg-white/10 text-emerald-100 border border-white/15 px-3 py-1.5 rounded-full text-sm inline-flex items-center gap-1.5"><i class="fa-solid fa-circle-check text-amber-400"></i> ${a}</span>`).join('')
-                : `<span class="text-slate-400 text-sm">No amenities specified.</span>`;
+        const amenitiesHtml = stay.amenities && stay.amenities.length > 0 
+            ? stay.amenities.map(a => `<span class="bg-white/10 text-emerald-100 border border-white/15 px-3 py-1.5 rounded-full text-sm inline-flex items-center gap-1.5"><i class="fa-solid fa-circle-check text-amber-400"></i> ${a}</span>`).join('')
+            : `<span class="text-slate-400 text-sm">No amenities specified.</span>`;
 
-            // 3. Render directly into the independent page container
-            document.getElementById('profileContainer').innerHTML = `
-                <section class="relative min-h-[75vh] flex items-center justify-center bg-slate-900 overflow-hidden">
-                    <div class="absolute inset-0 z-0">
-                        <img src="${stay.image}" alt="${stay.name}" class="w-full h-full object-cover object-center opacity-75">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20"></div>
-                    </div>
-                    <div class="relative z-10 max-w-5xl mx-auto px-4 text-center text-white py-20">
-                        <h1 class="font-serif text-4xl sm:text-6xl font-bold tracking-tight mb-6 leading-tight">${stay.name}</h1>
-                        <p class="text-lg sm:text-xl text-slate-200 max-w-2xl mx-auto font-light mb-10">${stay.description || ''}</p>
-                    </div>
-                </section>
-                <section class="bg-white border-b border-brand-100 py-6">
-                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-2 md:grid-cols-3 gap-6 text-center">
-                        <div><span class="block text-xs uppercase tracking-widest text-slate-400 font-semibold mb-1">Price</span><span class="text-2xl font-bold font-serif text-brand-700">₹${stay.price} / night</span></div>
-                        <div><span class="block text-xs uppercase tracking-widest text-slate-400 font-semibold mb-1">Location</span><span class="text-lg font-bold text-slate-700">${stay.location}</span></div>
-                    </div>
-                </section>
-            `;
-        } else {
-            document.getElementById('profileContainer').innerHTML = `<div class="p-12 text-center text-xl text-slate-600">Homestay not found.</div>`;
-        }
-    </script>
+        // 3. Populate container with full details
+        document.getElementById('profileContainer').innerHTML = `
+            <section class="relative min-h-[75vh] flex items-center justify-center bg-slate-900 overflow-hidden">
+                <div class="absolute inset-0 z-0">
+                    <img src="${stay.image}" alt="${stay.name}" class="w-full h-full object-cover object-center opacity-75">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20"></div>
+                </div>
+                <div class="relative z-10 max-w-5xl mx-auto px-4 text-center text-white py-20">
+                    <h1 class="font-serif text-4xl sm:text-6xl font-bold tracking-tight mb-6 leading-tight">${stay.name}</h1>
+                    <p class="text-lg sm:text-xl text-slate-200 max-w-2xl mx-auto font-light mb-10">${stay.description || 'Experience authentic mountain living.'}</p>
+                </div>
+            </section>
+            <section class="bg-white border-b border-brand-100 py-6">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-2 md:grid-cols-3 gap-6 text-center">
+                    <div><span class="block text-xs uppercase tracking-widest text-slate-400 font-semibold mb-1">Price</span><span class="text-2xl font-bold font-serif text-brand-700">₹${stay.price} / night</span></div>
+                    <div><span class="block text-xs uppercase tracking-widest text-slate-400 font-semibold mb-1">Location</span><span class="text-lg font-bold text-slate-700">${stay.location}</span></div>
+                </div>
+            </section>
+        `;
+    } else {
+        document.getElementById('profileContainer').innerHTML = `
+            <div class="min-h-[50vh] flex flex-col items-center justify-center text-center px-4">
+                <h2 class="text-2xl font-bold text-slate-800 mb-2">Homestay Not Found</h2>
+                <p class="text-slate-600 mb-6">The homestay you are looking for does not exist or was removed.</p>
+                <a href="index.html" class="bg-brand-700 text-white px-6 py-3 rounded-full font-semibold transition hover:bg-brand-800">Return to Directory</a>
+            </div>
+        `;
+    }
+</script>
 </body>
 </html>
