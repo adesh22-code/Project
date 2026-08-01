@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Darjeeling Escapes | Luxury & Boutique Homestays</title>
+
+    <!-- Google Fonts: Playfair Display (Serif) & Plus Jakarta Sans (Sans-serif) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome Vectors -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- ================= HERO HEADER ================= -->
+    <header class="hero">
+        <div class="hero-overlay"></div>
+        <nav class="nav-bar">
+            <div class="brand">
+                <i class="fa-solid fa-mountain-sun"></i>
+                <span>Darjeeling Escapes</span>
+            </div>
+            <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle Theme">
+                <i class="fa-solid fa-moon"></i> <span>Dark Mode</span>
+            </button>
+        </nav>
+
+        <div class="hero-content">
+            <span class="hero-badge"><i class="fa-solid fa-compass"></i> Curated Himalayan Retreats</span>
+            <h1>Discover Authentic Mountain Living</h1>
+            <p>Find handpicked homestays across Darjeeling, Lamahatta, Sitong, Takdah, and hidden valleys.</p>
+        </div>
+    </header>
+
+    <main class="container">
+        
+        <!-- ================= MAIN DIRECTORY VIEW ================= -->
+        <div id="main-view">
+            
+            <div class="refresh-notice">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> 
+                <span>Curated selection showing up to 10 stays. Refresh to explore new recommendations!</span>
+            </div>
+
+            <!-- Modern Filter Section -->
+            <div class="filter-card">
+                <div class="filter-group">
+                    <label for="searchInput"><i class="fa-solid fa-magnifying-glass"></i> Search</label>
+                    <input type="text" id="searchInput" placeholder="Search name or region..." />
+                </div>
+                <div class="filter-group">
+                    <label for="locationFilter"><i class="fa-solid fa-location-dot"></i> Location</label>
+                    <select id="locationFilter"><option value="all">All Locations</option></select>
+                </div>
+               <div class="filter-group">
+                    <label for="sceneFilter"><i class="fa-solid fa-tree"></i> Scenery</label>
+                    <select id="sceneFilter"><option value="all">All Views</option></select>
+                </div>
+                
+                <div class="filter-group">
+                    <label for="priceFilter">
+                        <span><i class="fa-solid fa-indian-rupee-sign"></i> Max Budget</span>
+                        <span id="priceDisplay">₹5000</span>
+                    </label>
+                    <input type="range" id="priceFilter" min="500" max="5000" step="100" value="5000" />
+                </div>
+            </div>
+
+            <!-- Homestay Cards Grid -->
+            <div class="grid" id="homestayGrid"></div>
+        </div>
+
+        <!-- ================= HOMESTAY PROFILE VIEW ================= -->
+       <!-- <div id="profile-view" class="hidden">
+            <button class="btn btn-back" onclick="closeProfile()">
+                <i class="fa-solid fa-arrow-left"></i> Back to Directory
+            </button>
+            <div class="profile-card" id="profileContainer"></div>
+        </div>
+        -->
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
