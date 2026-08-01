@@ -50,34 +50,7 @@ function parseCSV(csvText) {
         return entry;
     });
 }
-/*function parseCSV(csvText) {
-    const lines = csvText.trim().split('\n');
-    const headers = lines[0].split(',').map(header => header.trim());
-    
-    return lines.slice(1).map(line => {
-        // Regex to handle values inside quotes properly
-        const values = line.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g) || line.split(',');
-        const entry = {};
 
-        headers.forEach((header, index) => {
-            let val = values[index] ? values[index].replace(/^"|"$/g, '').trim() : '';
-
-            // Convert numeric fields
-            if (header === 'id' || header === 'price' || header === 'rating') {
-                val = Number(val) || 0;
-            }
-
-            // Convert comma-separated tags into arrays
-            if (header === 'amenities' || header === 'scenery') {
-                val = val ? val.split(',').map(item => item.trim()) : [];
-            }
-
-            entry[header] = val;
-        });
-
-        return entry;
-    });
-}*/
 
 async function loadHomestayData() {
     try {
@@ -219,59 +192,8 @@ function renderCards(data) {
 // ==========================================
 // 5. PROFILE PAGE SPA NAVIGATION
 // ==========================================
-/*function openProfile(id) {
-    const stay = allHomestaysData.find(s => s.id === id);
-    if (!stay) return;
 
-    let buttonsHtml = '';
-    if (stay.phone) buttonsHtml += `<a href="tel:${stay.phone}" class="btn btn-call"><i class="fa-solid fa-phone"></i></a>`;
-    if (stay.whatsapp) buttonsHtml += `<a href="https://wa.me/${stay.whatsapp}" target="_blank" class="btn btn-wa"><i class="fa-brands fa-whatsapp"></i></a>`;
-    
-    // Support both mapLink or googleMap column headers from Google Sheet
-    const mapUrl = stay.mapLink || stay.googleMap;
-    if (mapUrl) buttonsHtml += `<a href="${mapUrl}" target="_blank" class="btn btn-map"><i class="fa-solid fa-map-location-dot"></i></a>`;
-    
-    if (stay.website) buttonsHtml += `<a href="${stay.website}" target="_blank" class="btn btn-web"><i class="fa-solid fa-globe"></i></a>`;
-    if (stay.facebook) buttonsHtml += `<a href="${stay.facebook}" target="_blank" class="btn btn-fb"><i class="fa-brands fa-facebook"></i></a>`;
-    if (stay.instagram) buttonsHtml += `<a href="${stay.instagram}" target="_blank" class="btn btn-ig"><i class="fa-brands fa-instagram"></i></a>`;
-    if (stay.youtube) buttonsHtml += `<a href="${stay.youtube}" target="_blank" class="btn btn-yt"><i class="fa-brands fa-youtube"></i></a>`;
-    
-    buttonsHtml += `<button class="btn btn-share" onclick="shareHomestay(${stay.id}, '${stay.name}', '${stay.location}')"><i class="fa-solid fa-share-nodes"></i> Share Stay</button>`;
-
-    const sceneryTags = stay.scenery && stay.scenery.length > 0 ? stay.scenery.map(s => `<span class="tag"><i class="fa-solid fa-mountain-sun"></i> ${s}</span>`).join('') : '';
-    const amenityTags = stay.amenities && stay.amenities.length > 0 ? stay.amenities.map(a => `<span class="tag tag-amenity"><i class="fa-solid fa-circle-check"></i> ${a}</span>`).join('') : '';
-
-    document.getElementById('profileContainer').innerHTML = `
-        <img src="${stay.image}" alt="${stay.name}" class="profile-hero" />
-        <div class="profile-body">
-            <div class="profile-header">
-                <div class="profile-title">
-                    <h2>${stay.name}</h2>
-                    <div class="profile-location"><i class="fa-solid fa-location-dot"></i> ${stay.location}</div>
-                </div>
-                <div class="profile-price">
-                    ₹${stay.price} <span>per night</span>
-                </div>
-            </div>
-            
-            <div class="profile-section-title">Highlights & Amenities</div>
-            <div class="tags" style="margin-bottom: 2rem;">${sceneryTags} ${amenityTags}</div>
-            
-            <div class="profile-section-title">About this Homestay</div>
-            <p class="profile-desc">${stay.description || 'No description provided.'}</p>
-
-            <div class="profile-section-title">Connect & Reserve</div>
-            <div class="profile-actions">
-                ${buttonsHtml}
-            </div>
-        </div>
-    `;
-
-    document.getElementById('main-view').classList.add('hidden');
-    document.getElementById('profile-view').classList.remove('hidden');
-    window.scrollTo(0, 0); 
-}*/
-/*function openProfile(id) {
+function openProfile(id) {
     const stay = allHomestaysData.find(s => s.id === id);
     if (!stay) return;
 
@@ -349,10 +271,10 @@ function renderCards(data) {
     window.scrollTo(0, 0); 
 }
 
-*/
-function openProfile(id) {
+
+/*function openProfile(id) {
     window.open(`details.html?id=${id}`, '_blank');
-}
+}*/
 
     
 
