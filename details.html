@@ -25,39 +25,25 @@
     <main id="profileContainer">
         <!-- Dynamic content will be injected here -->
     </main>
-
+  <script src="script.js"></script>
 <script>
-    // Wrapped in DOMContentLoaded to ensure elements are fully accessible
-    document.addEventListener("DOMContentLoaded", function() {
-        // 1. Extract the ID parameter from the URL string
+    window.addEventListener('homestaysLoaded', function() {
+        renderDetails();
+    });
+
+    // Fallback check if data is already present instantly from cache/sync
+    if (typeof allHomestaysData !== 'undefined' && allHomestaysData.length > 0) {
+        renderDetails();
+    }
+
+    function renderDetails() {
         const urlParams = new URLSearchParams(window.location.search);
         const stayId = urlParams.get('id');
 
-        // 2. Ensure dataset is available and find the matching stay (handling string/number conversion)
-        const stay = (typeof allHomestaysData !== 'undefined') 
-            ? allHomestaysData.find(s => String(s.id) === String(stayId)) 
-            : null;
-
+        const stay = allHomestaysData.find(s => String(s.id).trim() === String(stayId).trim());
         const container = document.getElementById('profileContainer');
 
         if (stay) {
-            // Build buttons HTML
-            let buttonsHtml = '';
-            if (stay.phone) buttonsHtml += `<a href="tel:${stay.phone}" class="bg-brand-700 hover:bg-brand-800 text-white px-5 py-2.5 rounded-full text-sm font-semibold transition shadow-md">Book Stay</a>`;
-            if (stay.whatsapp) buttonsHtml += `<a href="https://wa.me/${stay.whatsapp}" target="_blank" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2.5 rounded-full text-sm font-semibold transition shadow-sm flex items-center gap-2"><i class="fa-brands fa-whatsapp text-lg"></i> WhatsApp</a>`;
-
-            const mapUrl = stay.mapLink || stay.googleMap;
-            const mapButtonHtml = mapUrl ? `<a href="${mapUrl}" target="_blank" class="inline-flex items-center gap-2 bg-slate-900 hover:bg-brand-700 text-white px-6 py-3 rounded-full text-sm font-semibold transition shadow-md"><i class="fa-solid fa-map-location-dot"></i> Open in Google Maps</a>` : '';
-
-            const sceneryHtml = stay.scenery && stay.scenery.length > 0 
-                ? stay.scenery.map(s => `<span class="bg-white/10 text-emerald-100 border border-white/15 px-3 py-1.5 rounded-full text-sm inline-flex items-center gap-1.5"><i class="fa-solid fa-mountain-sun text-amber-400"></i> ${s}</span>`).join('')
-                : `<span class="text-slate-400 text-sm">No scenery details specified.</span>`;
-
-            const amenitiesHtml = stay.amenities && stay.amenities.length > 0 
-                ? stay.amenities.map(a => `<span class="bg-white/10 text-emerald-100 border border-white/15 px-3 py-1.5 rounded-full text-sm inline-flex items-center gap-1.5"><i class="fa-solid fa-circle-check text-amber-400"></i> ${a}</span>`).join('')
-                : `<span class="text-slate-400 text-sm">No amenities specified.</span>`;
-
-            // 3. Populate container with full details
             container.innerHTML = `
                 <section class="relative min-h-[75vh] flex items-center justify-center bg-slate-900 overflow-hidden">
                     <div class="absolute inset-0 z-0">
@@ -80,12 +66,13 @@
             container.innerHTML = `
                 <div class="min-h-[50vh] flex flex-col items-center justify-center text-center px-4">
                     <h2 class="text-2xl font-bold text-slate-800 mb-2">Homestay Not Found</h2>
-                    <p class="text-slate-600 mb-6">The homestay you are looking for does not exist or was removed.</p>
+                    <p class="text-slate-600 mb-6">Could not match ID "${stayId}" from the Google Sheet database.</p>
                     <a href="index.html" class="bg-brand-700 text-white px-6 py-3 rounded-full font-semibold transition hover:bg-brand-800">Return to Directory</a>
                 </div>
             `;
         }
-    });
+    }
 </script>
+
 </body>
 </html>
