@@ -1,1 +1,92 @@
-hello 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homestay Details</title>
+    <!-- Include Tailwind CSS and FontAwesome -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Load your main data script -->
+    <script src="script.js"></script>
+</head>
+<body class="bg-brand-50 text-slate-800 font-sans antialiased">
+
+    <!-- Back Button -->
+    <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-brand-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <a href="index.html" class="font-serif text-xl font-bold tracking-tight text-brand-700 flex items-center gap-2 hover:text-brand-600 transition">
+                <i class="fa-solid fa-arrow-left"></i> Back to Directory
+            </a>
+        </div>
+    </header>
+
+    <!-- Content Container -->
+    <main id="profileContainer">
+        <!-- Loading State Spinner -->
+        <div class="min-h-[60vh] flex flex-col items-center justify-center text-center px-4">
+            <i class="fa-solid fa-spinner fa-spin text-4xl text-brand-700 mb-4"></i>
+            <p class="text-slate-600 font-medium">Loading homestay details from Google Sheets...</p>
+        </div>
+    </main>
+
+<script>
+    // Function that runs once data is available
+    function renderHomestayDetails() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const stayId = urlParams.get('id');
+
+        const container = document.getElementById('profileContainer');
+
+        if (typeof allHomestaysData === 'undefined' || !Array.isArray(allHomestaysData)) {
+            container.innerHTML = `<div class="p-12 text-center text-red-600 font-semibold">Error: Dataset could not be loaded.</div>`;
+            return;
+        }
+
+        const stay = allHomestaysData.find(s => String(s.id).trim() === String(stayId).trim());
+
+        if (stay) {
+            const mapUrl = stay.mapLink || stay.googleMap;
+            const mapButtonHtml = mapUrl ? `<a href="${mapUrl}" target="_blank" class="inline-flex items-center gap-2 bg-slate-900 hover:bg-brand-700 text-white px-6 py-3 rounded-full text-sm font-semibold transition shadow-md"><i class="fa-solid fa-map-location-dot"></i> Open in Google Maps</a>` : '';
+
+            container.innerHTML = `
+                <section class="relative min-h-[75vh] flex items-center justify-center bg-slate-900 overflow-hidden">
+                    <div class="absolute inset-0 z-0">
+                        <img src="${stay.image}" alt="${stay.name}" class="w-full h-full object-cover object-center opacity-75">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20"></div>
+                    </div>
+                    <div class="relative z-10 max-w-5xl mx-auto px-4 text-center text-white py-20">
+                        <h1 class="font-serif text-4xl sm:text-6xl font-bold tracking-tight mb-6 leading-tight">${stay.name}</h1>
+                        <p class="text-lg sm:text-xl text-slate-200 max-w-2xl mx-auto font-light mb-10">${stay.description || 'Experience authentic mountain living.'}</p>
+                    </div>
+                </section>
+                <section class="bg-white border-b border-brand-100 py-6">
+                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-2 md:grid-cols-3 gap-6 text-center">
+                        <div><span class="block text-xs uppercase tracking-widest text-slate-400 font-semibold mb-1">Price</span><span class="text-2xl font-bold font-serif text-brand-700">₹${stay.price} / night</span></div>
+                        <div><span class="block text-xs uppercase tracking-widest text-slate-400 font-semibold mb-1">Location</span><span class="text-lg font-bold text-slate-700">${stay.location}</span></div>
+                    </div>
+                </section>
+            `;
+        } else {
+            container.innerHTML = `
+                <div class="min-h-[50vh] flex flex-col items-center justify-center text-center px-4">
+                    <h2 class="text-2xl font-bold text-slate-800 mb-2">Homestay Not Found</h2>
+                    <p class="text-slate-600 mb-6">The homestay you are looking for does not exist or was removed.</p>
+                    <a href="index.html" class="bg-brand-700 text-white px-6 py-3 rounded-full font-semibold transition hover:bg-brand-800">Return to Directory</a>
+                </div>
+            `;
+        }
+    }
+
+    // Listen for custom event when script.js finishes fetching Google Sheet data
+    window.addEventListener('homestaysLoaded', renderHomestayDetails);
+
+    // Fallback if data is already populated instantly
+    setTimeout(() => {
+        if (typeof allHomestaysData !== 'undefined' && allHomestaysData.length > 0) {
+            renderHomestayDetails();
+        }
+    }, 500);
+</script>
+</body>
+</html>
