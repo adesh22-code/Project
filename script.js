@@ -271,7 +271,7 @@ function renderCards(data) {
     document.getElementById('profile-view').classList.remove('hidden');
     window.scrollTo(0, 0); 
 }*/
-function openProfile(id) {
+/*function openProfile(id) {
     const stay = allHomestaysData.find(s => s.id === id);
     if (!stay) return;
 
@@ -349,7 +349,10 @@ function openProfile(id) {
     window.scrollTo(0, 0); 
 }
 
-
+*/
+function openProfile(id) {
+    window.open(`details.html?id=${id}`, '_blank');
+}
 
     
 
