@@ -1,6 +1,6 @@
 let allHomestaysData = [];
 let activeHomestays = []; 
-
+window.dispatchEvent(new Event('homestaysLoaded'));
 const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTWXIyW8Zk4YXmIK4Bl1g2cMIIWBEOaaIrfSM2zaWsTr63lmc0Td8lDm2kY11Ap2w/pub?gid=942226858&single=true&output=csv';
 
 // ==========================================
